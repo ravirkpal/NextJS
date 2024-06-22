@@ -4,7 +4,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { useRouter } from "next/navigation";
-import User from "../Interface/page";
+import { BiSearch } from "react-icons/bi";
+import { User } from "../components/Interface/page";
 
 const Profile = () => {
   const [data, setData] = useState<User[]>([]);
@@ -17,7 +18,7 @@ const Profile = () => {
         "https://fakestoreapi.com/users"
       );
       setData(response.data);
-      setFilterData(response.data); 
+      setFilterData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -25,14 +26,14 @@ const Profile = () => {
 
   const handleEdit = (userId: number) => {
     console.log(`Edit user with ID: ${userId}`);
-    router.push(`/profile/${userId}`); 
+    router.push(`/profile/${userId}`);
   };
 
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = e.target.value.toLowerCase();
 
     if (searchValue.trim() === "") {
-      setFilterData(data); 
+      setFilterData(data);
     } else {
       const filtered = data.filter(
         (item) =>
@@ -41,7 +42,7 @@ const Profile = () => {
           item.address.city.toLowerCase().includes(searchValue) ||
           item.username.toLowerCase().includes(searchValue) ||
           item.email.toLowerCase().includes(searchValue) ||
-          item.phone.toLowerCase().includes(searchValue) 
+          item.phone.toLowerCase().includes(searchValue)
       );
       setFilterData(filtered);
     }
@@ -52,7 +53,9 @@ const Profile = () => {
       console.log(`Deleting user with ID: ${userId}`);
       await axios.delete(`https://fakestoreapi.com/users/${userId}`);
       setData((prevData) => prevData.filter((item) => item.id !== userId));
-      setFilterData((prevData) => prevData.filter((item) => item.id !== userId)); 
+      setFilterData((prevData) =>
+        prevData.filter((item) => item.id !== userId)
+      );
       console.log(`User with ID ${userId} deleted successfully`);
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -67,12 +70,16 @@ const Profile = () => {
     <div>
       <div className="p-2 flex justify-between items-center">
         <p className="text-2xl font-bold">UserData</p>
-        <input
-          type="text"
-          placeholder="Search..."
-          className="p-2 border-2 border-gray-700"
-          onChange={handleFilter}
-        />
+
+        <div className="p-2.5 flex items-center w-[400px] rounded-md px-4 mb-1 duration-300 cursor-pointer bg-gray-700 text-white">
+          <BiSearch className="text-[24px]" />
+          <input
+            type="text"
+            placeholder="Search"
+            className="text-[15px] ml-4 w-full bg-transparent focus:outline-none"
+            onChange={handleFilter}
+          />
+        </div>
       </div>
       <div className="w-full">
         <table className="min-w-full bg-white border">

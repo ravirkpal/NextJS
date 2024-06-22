@@ -1,11 +1,12 @@
 import React from 'react'
+import Sidebar from './components/Layout/sidebar/page'
 
-function Home() {
+function Honme() {
   return (
     <div>
-      <h1>Home</h1>
+      <Sidebar  />
     </div>
   )
 }
 
-export default Home
+export default Honme
