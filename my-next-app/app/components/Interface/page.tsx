@@ -1,4 +1,4 @@
-export default interface User {
+export interface User {
   id: number;
   name: {
     firstname: string;
@@ -10,4 +10,11 @@ export default interface User {
     city: string;
   };
   phone: string;
+}
+
+
+export interface SidebarItem {
+  title: string;
+  routing: string;
+  icon: JSX.Element; 
 }

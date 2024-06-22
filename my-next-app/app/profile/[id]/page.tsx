@@ -3,7 +3,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import User from "@/app/Interface/page";
+import { User } from "@/app/components/Interface/page";
 
 const Profile = ({ params }: { params: { id: number } }) => {
   const [user, setUser] = useState<User | null>(null);
