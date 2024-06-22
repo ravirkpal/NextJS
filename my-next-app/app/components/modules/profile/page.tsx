@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { useRouter } from "next/navigation";
-import User from "../Interface/page";
+import { User } from "../../Interface/page";
 
 const Profile = () => {
   const [data, setData] = useState<User[]>([]);
