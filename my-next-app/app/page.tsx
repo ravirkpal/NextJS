@@ -1,8 +1,11 @@
+import React from 'react'
 
-export default function Home() {
+function Home() {
   return (
-    <div className="text-center mt-4">
-      <h1 className="font-bold text-[30px]">welcome to home pal</h1>
+    <div>
+      <h1>Home</h1>
     </div>
-  );
+  )
 }
+
+export default Home
