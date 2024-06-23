@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, { useEffect, useState } from "react";
 import {
@@ -12,38 +12,56 @@ import {
 } from "react-icons/bi";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  RiDashboardLine,
-  RiCustomerServiceLine,
-  RiProductHuntLine,
-  RiShoppingCartLine,
-  RiContactsLine,
-} from "react-icons/ri"; // Import icons from react-icons/ri
 import sidebarOptions from "../../jsonData/page";
+import Loading from "../../modules/loading";
+import { MdLogin } from "react-icons/md";
+import Login from "@/app/login/page";
 
 const Sidebar = () => {
   const router = useRouter();
   const [filterSidebar, setFilterSidebar] = useState(sidebarOptions);
+  const [loading, setLoading] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [credit, setCredential] = useState();
 
   const handleRedirect = (routing: string) => {
+    setLoading(true);
     router.push(routing);
+    setLoading(false);
   };
 
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const filteredOptions = sidebarOptions.filter(option =>
+    const filteredOptions = sidebarOptions.filter((option) =>
       option.title.toLowerCase().includes(e.target.value.toLowerCase())
     );
     setFilterSidebar(filteredOptions);
   };
 
-  return (
-    <div className="min-h-screen relative">
-      <div className="absolute top-5 left-4 cursor-pointer">
-        <BiFilter className="px-2 bg-gray-900 rounded-md text-white text-4xl" />
+  useEffect(() => {
+    const storedCredentials = localStorage.getItem("credentials");
+    if (storedCredentials) {
+      // Parse the stored string back into an object
+      const parsedCredentials = JSON.parse(storedCredentials);
+      setCredential(parsedCredentials);
+    }
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="loading-tag">
+        <Loading />
       </div>
-      <div className="sidebar fixed top-0 bottom-0 p-2 w-340px overflow-y-auto text-center bg-gray-900 transition-transform duration-300">
+    );
+  }
+
+
+  return (
+    <>
+      <div className="sidebar fixed top-0 bottom-0 p-2 w-[324px] overflow-y-auto text-center bg-gray-900 transition-transform duration-300">
         <div className="text-gray-100 text-4xl">
-          <div className="p-2.5 mt-1 flex items-center" onClick={() => handleRedirect("/")}
+          <div
+            className="p-2.5 mt-1 flex items-center"
+            onClick={() => handleRedirect("/")}
           >
             <BiAperture className="px-2 py-1 rounded-md bg-blue-600" />
             <h1 className="font-bold text-gray-200 text-[15px] ml-3">
@@ -77,15 +95,19 @@ const Sidebar = () => {
         <div className="my-4 bg-gray-600 h-[1px]"></div>
         <div
           className="p-2.5 mt-3 flex items-center rounded-md px-4 text-2xl duration-300 cursor-pointer hover:bg-blue-600 text-white"
-          onClick={() => handleRedirect("/logout")}
+          onClick={() => setIsLoginOpen(true)}
         >
-          <BiLogOut />
+          {credit ? <BiLogOut /> : <MdLogin />}
           <span className="text-[15px] ml-4 text-gray-200 font-bold">
-            Logout
+            {credit ? "Logout" : "Login"}
           </span>
         </div>
       </div>
-    </div>
+      <Login
+        open={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+      />
+    </>
   );
 };
 

@@ -6,21 +6,28 @@ import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import { BiSearch } from "react-icons/bi";
 import { User } from "../components/Interface/page";
+import Loading from "../components/modules/loading";
+import { MdKeyboardArrowLeft } from "react-icons/md";
+import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Profile = () => {
   const [data, setData] = useState<User[]>([]);
   const [filterData, setFilterData] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const fetchData = async () => {
     try {
-      const response = await axios.get<User[]>(
-        "https://fakestoreapi.com/users"
-      );
+      const response = await axios.get<User[]>("https://fakestoreapi.com/users");
       setData(response.data);
       setFilterData(response.data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setLoading(false);
+      toast.error("Error fetching data!");
     }
   };
 
@@ -56,15 +63,24 @@ const Profile = () => {
       setFilterData((prevData) =>
         prevData.filter((item) => item.id !== userId)
       );
-      console.log(`User with ID ${userId} deleted successfully`);
+      toast.success(`User with ID ${userId} deleted successfully!`);
     } catch (error) {
       console.error("Error deleting user:", error);
+      toast.error("Error deleting user!");
     }
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="loading-tag">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -122,6 +138,7 @@ const Profile = () => {
           </tbody>
         </table>
       </div>
+      <ToastContainer />
     </div>
   );
 };

@@ -1,12 +1,29 @@
-import React from 'react'
-import Sidebar from './components/Layout/sidebar/page'
+'use client'
 
-function Honme() {
+import React, { useEffect, useState } from "react";
+import Dashboard from "./dashboard/page";
+import { useRouter } from "next/navigation";
+import Login from "./login/page";
+
+const Home = () => {
+  const router = useRouter();
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+
+  useEffect(() => {
+    const credit = localStorage.getItem("user");
+    if (!credit) {
+      setIsLoginOpen(true);
+    }
+  }, [router]);
+
   return (
-    <div>
-      <Sidebar  />
-    </div>
-  )
-}
+    <>
+      <div>
+        <Dashboard />
+      </div>
+      <Login open={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+    </>
+  );
+};
 
-export default Honme
+export default Home;
