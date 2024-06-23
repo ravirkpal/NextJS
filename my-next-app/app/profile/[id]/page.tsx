@@ -4,16 +4,18 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { User } from "@/app/components/Interface/page";
+import Loading from "@/app/components/modules/loading";
 
 const Profile = ({ params }: { params: { id: number } }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userData, setUserData] = useState({
-    email: '',
-    username: '',
-    firstname: '',
-    lastname: '',
-    city: '',
+    email: "",
+    username: "",
+    firstname: "",
+    lastname: "",
+    city: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   const userId = params.id;
@@ -22,27 +24,28 @@ const Profile = ({ params }: { params: { id: number } }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        setLoading(true);
         const response = await axios.get<User>(
           `https://fakestoreapi.com/users/${userId}`
         );
         setUser(response.data);
-        // Initialize userData state with fetched data
         setUserData({
           email: response.data.email,
           username: response.data.username,
-          firstname: response.data.name?.firstname || '',
-          lastname: response.data.name?.lastname || '',
-          city: response.data.address?.city || '',
+          firstname: response.data.name?.firstname || "",
+          lastname: response.data.name?.lastname || "",
+          city: response.data.address?.city || "",
         });
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setLoading(false);
       }
     };
 
     fetchUserData();
   }, [userId]);
 
-  // Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData((prevUserData) => ({
@@ -51,37 +54,45 @@ const Profile = ({ params }: { params: { id: number } }) => {
     }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     try {
-      // Prepare updated user data object
+      setLoading(true);
       const updatedUser = {
         ...user,
         email: userData.email,
         username: userData.username,
         name: {
           firstname: userData.firstname,
-          lastname: userData.lastname
+          lastname: userData.lastname,
         },
         address: {
-          city: userData.city
-        }
+          city: userData.city,
+        },
       };
 
       const response = await axios.put(
         `https://fakestoreapi.com/users/${userId}`,
         updatedUser
       );
-      
+
       console.log("Updated user data:", response.data);
       router.push("/profile");
+      setLoading(false);
+
     } catch (error) {
       console.error("Error updating user data:", error);
     }
   };
 
-  if (!user) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="loading-tag">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className="p-4">
@@ -94,7 +105,7 @@ const Profile = ({ params }: { params: { id: number } }) => {
             name="firstname"
             value={userData.firstname}
             onChange={handleChange}
-            className="p-2 border border-gray-300"
+            className="p-2 m-1 border border-gray-300"
           />
         </div>
         <div>
@@ -104,7 +115,7 @@ const Profile = ({ params }: { params: { id: number } }) => {
             name="lastname"
             value={userData.lastname}
             onChange={handleChange}
-            className="p-2 border border-gray-300"
+            className="p-2 m-1 border border-gray-300"
           />
         </div>
         <div>
@@ -114,7 +125,7 @@ const Profile = ({ params }: { params: { id: number } }) => {
             name="email"
             value={userData.email}
             onChange={handleChange}
-            className="p-2 border border-gray-300"
+            className="p-2 m-1 border border-gray-300"
           />
         </div>
         <div>
@@ -124,7 +135,7 @@ const Profile = ({ params }: { params: { id: number } }) => {
             name="username"
             value={userData.username}
             onChange={handleChange}
-            className="p-2 border border-gray-300"
+            className="p-2 m-1 border border-gray-300"
           />
         </div>
         <div>
@@ -134,14 +145,14 @@ const Profile = ({ params }: { params: { id: number } }) => {
             name="city"
             value={userData.city}
             onChange={handleChange}
-            className="p-2 border border-gray-300"
+            className="p-2 m-1 border border-gray-300"
           />
         </div>
         <button
           type="submit"
           className="bg-blue-500 text-white px-4 py-2 rounded"
         >
-          Save
+          Update
         </button>
       </form>
     </div>
