@@ -57,7 +57,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="sidebar fixed top-0 bottom-0 p-2 w-[324px] overflow-y-auto text-center bg-gray-900 transition-transform duration-300">
+      <div className="sidebar fixed top-0 bottom-0 p-2 overflow-y-auto text-center bg-gray-900 transition-transform duration-300">
         <div className="text-gray-100 text-4xl">
           <div
             className="p-2.5 mt-1 flex items-center"

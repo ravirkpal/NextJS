@@ -25,10 +25,10 @@ export default function RootLayout({
       <body className={inter.className}>
         {" "}
         <div className="flex h-screen">
-          <div className="w-1/5 bg-gray-200">
+          <div className="w-1/5">
             <Sidebar />
           </div>
-          <div className="w-4/5 p-4">{children}</div>
+          <div className="w-4/5">{children}</div>
         </div>
       <UseAuth />
       </body>

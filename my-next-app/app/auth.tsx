@@ -10,22 +10,16 @@ const UseAuth = () => {
   const [loading, setLoading] = useState(true);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
-
   useEffect(() => {
     const checkAuth = () => {
       const storedUser = localStorage.getItem("user");
       if (!storedUser) {
         setIsLoginOpen(true);
-      } else {
-        router.push("/dashboard");
       }
-    setLoading(false);
-
+      setLoading(false);
     };
 
     checkAuth();
-
-
   }, [router]);
 
   if (loading) {
@@ -36,12 +30,11 @@ const UseAuth = () => {
     );
   }
 
-  return <>
-        <Login
-        open={isLoginOpen}
-        onClose={() => setIsLoginOpen(false)}
-      />
-  </>;
+  return (
+    <>
+      <Login open={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+    </>
+  );
 };
 
 export default UseAuth;
